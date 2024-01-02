@@ -17,9 +17,9 @@ efflu_data_type_t;
 typedef struct
 {
 	char	*url;
-	char	*db;
-	char	*user;
-	char	*pass;
+	char	*org;
+	char	*bucket;
+	char	*token;
 }
 efflu_destination_t;
 

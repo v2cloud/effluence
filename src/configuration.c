@@ -74,9 +74,9 @@ static int	efflu_parse_node(yaml_document_t *config, const yaml_node_t *node, ef
 			const efflu_configuration_option_t	*option, options[] =
 			{
 				{"url",		&top->url},
-				{"db",		&top->db},
-				{"user",	&top->user},
-				{"pass",	&top->pass},
+				{"org",		&top->org},
+				{"bucket",	&top->bucket},
+				{"token",	&top->token},
 				{0}
 			};
 
@@ -233,9 +233,9 @@ efflu_destination_t	efflu_configured_destination(efflu_data_type_t type)
 
 	return (efflu_destination_t){
 		.url = EFFLU_GET_CONFIG(url),
-		.db = EFFLU_GET_CONFIG(db),
-		.user = EFFLU_GET_CONFIG(user),
-		.pass = EFFLU_GET_CONFIG(pass)
+		.org = EFFLU_GET_CONFIG(org),
+		.bucket = EFFLU_GET_CONFIG(bucket),
+		.token = EFFLU_GET_CONFIG(token)
 	};
 
 #undef EFFLU_GET_CONFIG
@@ -262,7 +262,7 @@ const char	*efflu_data_type_string(efflu_data_type_t type)
 
 static void	efflu_clean_destination(efflu_destination_t destination)
 {
-	char	*buffers_to_free[] = {destination.url, destination.db, destination.user, destination.pass};
+	char	*buffers_to_free[] = {destination.url, destination.org, destination.bucket, destination.token};
 	size_t	index = sizeof(buffers_to_free) / sizeof(char *);
 
 	while (0 < index--)

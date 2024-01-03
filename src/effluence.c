@@ -173,63 +173,63 @@ static void	efflu_write(efflu_destination_t destination, const char *post)
     CURL *curl;
 	curl = curl_easy_init();
 
-	 if (!curl) {
-        printf(stderr, "Error: Failed to initialize libcurl\n");
-    }
+	if (!curl) {
+	    printf("Error: Failed to initialize libcurl\n");
+	}
 
 	if(curl) {
 
-	  curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+	    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
 
-	  if(-1 == asprintf(&endpoint, "%s/api/v2/write?org=%s&bucket=%s", destination.url, destination.org, destination.bucket)){
-	    printf("Failed to compose write endpoint URL.\n");
-	  }
+	    if(-1 == asprintf(&endpoint, "%s/api/v2/write?org=%s&bucket=%s", destination.url, destination.org, destination.bucket)) {
+	        printf("Failed to compose write endpoint URL.\n");
+	    }
 
-	  else if(-1 == asprintf(&token, "Authorization: Token %s", destination.token)){
-	    printf("Failed to set token authorization\n");
-	  }
+	    else if(-1 == asprintf(&token, "Authorization: Token %s", destination.token)) {
+	        printf("Failed to set token authorization\n");
+	    }
 
-	  else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_URL, endpoint))) {
-	    printf("Error setting CURLOPT_URL: %s\n", curl_easy_strerror(ret))
-	  }
+	    else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_URL, endpoint))) {
+	        printf("Error setting CURLOPT_URL: %s\n", curl_easy_strerror(ret));
+	    }
 
-	  else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L))){
-	    printf("Error setting CURLOPT_FOLLOWLOCATION: %s\n", curl_easy_strerror(ret))
-	  }
+	    else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L))) {
+	        printf("Error setting CURLOPT_FOLLOWLOCATION: %s\n", curl_easy_strerror(ret));
+	    }
 
-	  else if (CURLE_OK != (ret =curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, "https"))){
-	    printf("Error setting CURLOPT_DEFAULT_PROTOCOL: %s\n", curl_easy_strerror(ret))
-	  }
+	    else if (CURLE_OK != (ret =curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, "https"))) {
+	        printf("Error setting CURLOPT_DEFAULT_PROTOCOL: %s\n", curl_easy_strerror(ret));
+	    }
 
-	  struct curl_slist *headers = NULL;
-	  headers = curl_slist_append(headers, token);
-	  headers = curl_slist_append(headers, "Content-Type: text/plain; charset=utf-8");
-	  headers = curl_slist_append(headers, "Accept: application/json");
+	    struct curl_slist *headers = NULL;
+	    headers = curl_slist_append(headers, token);
+	    headers = curl_slist_append(headers, "Content-Type: text/plain; charset=utf-8");
+	    headers = curl_slist_append(headers, "Accept: application/json");
 
-	  else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers))){
-	    printf("Error setting CURLOPT_HTTPHEADER: %s\n", curl_easy_strerror(ret))
-	  }
+	    if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers))) {
+	        printf("Error setting CURLOPT_HTTPHEADER: %s\n", curl_easy_strerror(ret));
+	    }
 
-	  else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post))){
-	    printf("Error setting CURLOPT_POSTFIELDS: %s\n", curl_easy_strerror(ret))
-	  }
+	    else if (CURLE_OK != (ret = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post))) {
+	        printf("Error setting CURLOPT_POSTFIELDS: %s\n", curl_easy_strerror(ret));
+	    }
 
-	  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
-	  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
+	    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
+	    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
 
-	  ret = curl_easy_perform(curl)
+	    ret = curl_easy_perform(curl);
 
-	  if (ret == CURLE_OPERATION_TIMEDOUT){
-	    printf("Error: Connection timed out\n")
-	  }
-	  else if(ret !- CURLE_OK){
-	    printf("Error in curl_easy_perform: %s\n", curl_easy_strerror(ret))
-	  }
+	    if (ret == CURLE_OPERATION_TIMEDOUT) {
+	        printf("Error: Connection timed out\n");
+	    }
+	    else if(ret != CURLE_OK) {
+	        printf("Error in curl_easy_perform: %s\n", curl_easy_strerror(ret));
+	    }
 
-	 curl_slist_free_all(headers);
-	 free(endpoint);
-	 free(token);
-	 curl_easy_cleanup(curl);
+	    curl_slist_free_all(headers);
+	    free(endpoint);
+	    free(token);
+	    curl_easy_cleanup(curl);
 	}
 
 }

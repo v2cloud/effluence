@@ -5,7 +5,7 @@ USER root
 RUN apt-get update && \
  apt-get install -y  git build-essential libcurl4-openssl-dev libyaml-dev \
  libcurl4 libyaml-0-2 autotools-dev automake && \
- git clone --branch 6.0.23 https://git.zabbix.com/scm/zbx/zabbix.git --depth 1 /zabbix-source
+ git clone --branch 6.4.10 https://git.zabbix.com/scm/zbx/zabbix.git --depth 1 /zabbix-source
 
 WORKDIR /zabbix-source
 
